@@ -294,12 +294,7 @@ function ProductDetails() {
           {/* ── Product Info ── */}
           <div className="w-full md:flex-1 space-y-5 mt-5">
             <h1 className="text-2xl md:text-3xl font-bold">{product.name}</h1>
-<<<<<<< Updated upstream
-
-            {/* Price row */}
-=======
-              <h2 className="text-[16px] text-[#acb1b8]">{product.short_description}</h2>
->>>>>>> Stashed changes
+  
             <div className="flex items-center gap-3">
               <p className="text-2xl font-semibold text-[#000]">
                 ৳ {finalPrice.toFixed(2)}
@@ -397,11 +392,9 @@ function ProductDetails() {
               onClose={() => setOpenCOD(false)}
             />
 
-<<<<<<< Updated upstream
             <h2 className="text-xs md:text-[16px] leading-[1.6rem]">
               {product.short_description}
             </h2>
-=======
             <button
               onClick={handleWhatsApp}
               className="w-full bg-[#2CC4F4] text-white py-2 rounded"
@@ -412,7 +405,6 @@ function ProductDetails() {
                   className="prose max-w-none mt-4"
                   dangerouslySetInnerHTML={{ __html: product.description }}
               />
->>>>>>> Stashed changes
           </div>
         </div>
 
