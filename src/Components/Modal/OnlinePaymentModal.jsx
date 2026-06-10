@@ -52,7 +52,7 @@ const OnlinePaymentModal = ({ open, onClose }) => {
     };
 
     try {
-      const res = await api.post("/gust/user/order/store", payload);
+      const res = await api.post("/gust/user/order/store/online", payload);
 
       if (res.data?.result) {
         const orderId = res.data?.order_id;
@@ -77,7 +77,7 @@ const OnlinePaymentModal = ({ open, onClose }) => {
   };
 
   const subtotal = cart.reduce((s, i) => s + parseFloat(i.price) * i.qty, 0);
-  const shippingCharge = form.shipping === "dhaka" ? 70 : 160;
+  const shippingCharge = form.shipping === "dhaka" ? 0 : 0;
   const total = subtotal + shippingCharge;
 
   if (!open) return null;
@@ -137,8 +137,8 @@ const OnlinePaymentModal = ({ open, onClose }) => {
             <div>
               <p className="font-medium mb-1">শিপিং মেথড</p>
               {[
-                ["dhaka", "ঢাকা সিটির ভিতরে", 70],
-                ["outsite", "ঢাকা সিটির বাহিরে", 160],
+                ["dhaka", "ঢাকা সিটির ভিতরে", 0],
+                ["outsite", "ঢাকা সিটির বাহিরে", 0],
               ].map(([key, label, price]) => (
                 <label
                   key={key}
