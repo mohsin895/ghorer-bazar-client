@@ -221,7 +221,7 @@ const CartDrawer = () => {
                               quantity: 1,
                               temp_user_id: tempUserId,
                             });
-
+                              const cartItem = res.data.cart?.find((c) => c.product_id === p.id);
                             if (!tempUserId && res.data?.temp_user_id) {
                               localStorage.setItem(
                                 "temp_user_id",
@@ -229,13 +229,14 @@ const CartDrawer = () => {
                               );
                             }
 
-                            addToCart({
-                              id: p.id,
-                              name: p.name,
-                              price: price,
-                              image: p.thumbnail_image,
-                              qty: 1,
-                            });
+                              addToCart({
+                                  id: cartItem?.id ?? p.id,  // ✅ cart row ID
+                                  product_id: p.id,
+                                  name: p.name,
+                                  price: price,
+                                  image: p.thumbnail_image,
+                                  qty: cartItem?.quantity ?? 1,
+                              });
 
                             setIsDrawerOpen(true);
                           } catch (err) {

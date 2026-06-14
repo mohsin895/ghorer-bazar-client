@@ -23,43 +23,49 @@ const AllProducts = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleAddToCart = async (product) => {
-    if (product.current_stock === 0) return;
+    const handleAddToCart = async (product) => {
+        if (product.current_stock === 0) return;
 
-    try {
-      const temp_user_id = localStorage.getItem("temp_user_id");
+        try {
+            const temp_user_id = localStorage.getItem("temp_user_id");
 
-      const payload = {
-        id: product.id,
-        quantity: 1,
-        ...(temp_user_id ? { temp_user_id } : {}),
-      };
+            const payload = {
+                id: product.id,
+                quantity: 1,
+                ...(temp_user_id ? { temp_user_id } : {}),
+            };
 
-      const res = await api.post("/carts/add", payload);
+            const res = await api.post("/carts/add", payload);
 
-      if (res.data?.result) {
-        if (res.data.temp_user_id) {
-          localStorage.setItem("temp_user_id", res.data.temp_user_id);
+            if (res.data?.result) {
+                if (res.data.temp_user_id) {
+                    localStorage.setItem("temp_user_id", res.data.temp_user_id);
+                }
+
+                const price = parseFloat(
+                    String(product.main_price ?? 0).replace(/[^0-9.]/g, ""),
+                );
+
+                // ✅ Find the matching cart row by product_id from the response
+                const cartItem = res.data.cart?.find(
+                    (c) => c.product_id === product.id,
+                );
+
+                addToCart({
+                    id: cartItem?.id ?? product.id, // ✅ use cart row ID for remove/qty ops
+                    product_id: product.id,          // ✅ keep product ID for reference
+                    name: product.name,
+                    price: price,
+                    image: product.thumbnail_image,
+                    qty: cartItem?.quantity ?? 1,    // ✅ use actual qty from DB
+                });
+
+                setIsDrawerOpen(true);
+            }
+        } catch (err) {
+            console.error("Cart API error:", err);
         }
-
-        const price = parseFloat(
-          String(product.main_price ?? 0).replace(/[^0-9.]/g, ""),
-        );
-
-        addToCart({
-          id: product.id,
-          name: product.name,
-          price: price,
-          image: product.thumbnail_image,
-          qty: 1,
-        });
-
-        setIsDrawerOpen(true);
-      }
-    } catch (err) {
-      console.error("Cart API error:", err);
-    }
-  };
+    };
 
   if (loading) return <Loader />;
 
